@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>MATHRUKA NATURAL WELLNESS STORE</title>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css'>
+<link rel='stylesheet prefetch' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+
+      <link rel="stylesheet" href="registration.css">
+
+  
+</head>
+
+<body>
+
+  
+<body ng-controller="RegisterCtrl" ng-app="myApp">
+ <div class="container">
+   <div id="signup">
+      <div class="signup-screen">
+         <div class="space-bot text-center">
+            <h1>Sign up</h1>
+           <div class="divider"></div>
+         </div>
+           <form class="form-register" method="post" name="register" novalidate>
+	            <div class="input-field col s6">
+              <input id="firstname" type="text" class="validate" required>
+              <label for="firstname">First Name</label>
+            </div>
+            <div class="input-field col s6">
+              <input id="lastname" type="text" class="validate" required>
+              <label for="lastname">Last Name</label>
+             </div>
+             <div class="input-field col s6">
+              <input id="email" type="email" name="email" ng-model="email" class="validate" required>
+              <label for="email">Email</label>
+             </div>
+			 <div >
+			 <label for="date">Date of Birth</label>
+			 <input id="date" type="date" class="validate" required>
+			 </div>
+			 <div class="input-field col s6">
+			 <input id="mobile" type="text" class="validate" required>
+			 <label for="mobile">Contact number</label>
+			 </div>
+			 <div class="input-field col s6">
+			 <textarea name="address_line_1" rows="5" cols="25">address line 1</textarea>
+			 </div>
+			 <div class="input-field col s6">
+			 <textarea name="address_line_2" rows="5" cols="25">address line 2</textarea>
+			 </div>
+			 <div class="control-group">
+                    <label class="control-label">City / Town</label>
+                    <div class="controls">
+                        <input id="city" name="city" type="text" placeholder="city" class="input-xlarge">
+                    </div>
+                </div>
+                <!-- region input-->
+                <div class="control-group">
+                    <label class="control-label">State / Province / Region</label>
+                    <div class="controls">
+                        <input id="region" name="region" type="text" placeholder="state / province / region"
+                        class="input-xlarge">
+                    </div>
+                </div>
+                <!-- postal-code input-->
+                <div class="control-group">
+                    <label class="control-label">Zip / Postal Code</label>
+                    <div class="controls">
+                        <input id="postal_code" name="postal-code" type="text" placeholder="zip or postal code">
+                    </div>
+                </div>
+                <!-- country select -->
+                <div class="input-field col s6">
+				<input id="country" type="text" placeholder="">
+				<label for="country">Country</label>
+                    
+             <div class="input-field col s6">
+               <input id="password" type="password" name="password" ng-model="password" ng-minlength='6' class="validate" required>
+               <label for="password">Password</label>
+              </div>
+			  <div class="input-field col s6">
+               <input id="Confirm_password" type="password" name="password" ng-model="password" ng-minlength='6' class="validate" required>
+               <label for="Confirm_password">Confirm Password</label>
+              </div>
+              <div class="space-top text-center">
+               <button ng-disabled="form-register.$invalid" class="waves-effect waves-light btn done" Onclick="UserAction()">
+               <i class="material-icons left">done</i> Done
+               </button>
+               <button type="button" class="waves-effect waves-light btn cancel">
+               <i class="material-icons left">clear</i>Cancel
+               </button>
+              </div>
+             </form>
+           </div>
+        </div>
+    </div>
+</body>
+  <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js'></script>
+
+  
+
+    <script  src="js/registration.js"></script>
+<script>
+		function UserAction() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8095/digitalS/admin/user/");
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+    var response = JSON.parse(xhttp.responseText);
+}</script>
+		<script>
+		function validate_registration(){
+	var APIAddress="<%=APIAddress%>";
+	var Apikey="<%=Apikey%>";
+	var myJSON;
+	alert("hi");
+	var url="http://localhost:8095/digitalS/admin/user/"
+	callType="+val";
+	$.ajax({
+		url: url,
+		data:myJSON,
+		type: 'POST',
+		crossDomain: true,
+		headers:{  
+			"Accept":"application/json",
+			"Content-type":"application/json;charset=UTF-8"
+		}, 
+		success: function(data, textStatus, jqXHR) { 
+			if(IsJsonString(data)){
+				var myObj = JSON.parse(data);
+				if(val=="search"){
+					if(myObj.length>0){
+						$("#deleteCache").show();
+					}
+					for(var i=0;i<myObj.length;i++){
+						var $row = 
+							  $('<tr><td><input type="checkbox" name="'+myObj[i].assetType+'" value="'+myObj[i].assetId+'"></td>' 
+							  + '<td>'+myObj[i].assetName+'</td>'
+							  + '<td>'+myObj[i].assetType+'</td>'
+							  + '<td>'+myObj[i].updatedBy+'</td>'
+							  + '<td>'+myObj[i].publishingDate+'</td>'
+							  + '</tr>');
+							table.row.add($row).draw();
+					}
+				}else{
+					if(myObj.failedCount=="ERROR"){
+							$("#innerText").html("Failed to delete Cache please try again");
+							$('#dialog').dialog('option', 'title', 'Failed!');
+						}else{
+							$("#innerText").html("Deleted successfully ");
+							$('#dialog').dialog('option', 'title', 'success');
+						}
+					$("#dialog").dialog('open');	
+				}
+			}
+		},
+		error: function(jqXHR, textStatus, errorThrown) { alert('Failed!'); }
+	});
+}
+
+
+</script>
+</body>
+
+</html>
